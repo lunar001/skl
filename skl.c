@@ -68,7 +68,57 @@ void InsertSkl(SklHdr * hdr, SklNode * node, ssize_t level)
 
 	return;
 }
+SklNode * DeleteSkl(SklHdr * hdr, unsigned long key)
+{
+	/* Delete node whose key equals key from the skip list*/
+	SklNode * head = (void *)hdr + sizeof(SklHdr);
 
+	SklNode * update[SKL_MXLVL] = { NULL };
+
+	/* node store the deleted node and return caller */
+	SklNode * node = NULL; 
+	
+	/* minusing one transform level to index */
+	ssize_t i = hdr->skl_level - 1; 
+
+	for(; i>= 0; i--)
+	{
+		while(head != NULL && head->frwrd[i] != NULL
+				&&head->frwrd[i]->key < key)
+			head = head->frwrd[i];
+
+		update[i] = head;
+	}
+
+	/* not like insert, we don't need to update all the level list */
+
+	/* to here, head is must points the previous element of node   *
+	 * otherwise, node is not exist in this skip list              */
+	if (head->frwrd[0] != NULL && head->frwrd[0]->key == key)
+	{
+		/* first update the lowest list, the list in this level is doubly linked list*/
+		head = update[0]->frwrd[0];
+		node = head;
+		update[0]->frwrd[0] = head->frwrd[0];
+		if(head->frwrd[0] != NULL)
+			head->frwrd[0]->back = update[0];
+		/* second update all the higher leveles, the list in those level are single list*/
+		for(i = 1; i < hdr->skl_level; i++)
+		{
+			/* for every level, check if the forward node is the deleted node or not */
+			head = update[i]->frwrd[i];
+			if(head != NULL && head->key == node->key)
+				/* of course, head->frwrd[i] may equals NULL*/
+				update[i]->frwrd[i] = head->frwrd[i]; 
+		}
+		
+		return  node;
+	}
+	else
+		/* node is not include in this skip list */
+		return NULL;
+
+}
 
 void SklTrav(SklHdr * hdr)
 {

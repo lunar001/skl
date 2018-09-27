@@ -40,5 +40,6 @@ typedef struct skl_node
 ssize_t GetLevel();
 struct skl_header * CreateSkl();
 void InsertSkl(SklHdr * hdr, SklNode * node, ssize_t level);
+SklNode * DeleteSkl(SklHdr * hdr, unsigned long key);
 void SklTrav(SklHdr * hdr);
 #endif
