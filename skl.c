@@ -68,6 +68,7 @@ void InsertSkl(SklHdr * hdr, SklNode * node, ssize_t level)
 
 	return;
 }
+
 SklNode * DeleteSkl(SklHdr * hdr, unsigned long key)
 {
 	/* Delete node whose key equals key from the skip list*/
@@ -117,7 +118,6 @@ SklNode * DeleteSkl(SklHdr * hdr, unsigned long key)
 	else
 		/* node is not include in this skip list */
 		return NULL;
-
 }
 
 SklNode * SearchNode(SklHdr * hdr, unsigned long key)
@@ -143,7 +143,6 @@ SklNode * SearchNode(SklHdr * hdr, unsigned long key)
 	return target;
 }
 
-
 void SklTrav(SklHdr * hdr)
 {
 	ssize_t i = SKL_MXLVL - 1;
@@ -160,13 +159,6 @@ void SklTrav(SklHdr * hdr)
 			tmp = tmp->frwrd[i];
 		}
 		printf("\n");
-
 	}
 }
-
-
-
-
-
-
 
