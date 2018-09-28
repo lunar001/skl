@@ -107,7 +107,7 @@ SklNode * DeleteSkl(SklHdr * hdr, unsigned long key)
 		{
 			/* for every level, check if the forward node is the deleted node or not */
 			head = update[i]->frwrd[i];
-			if(head != NULL && head->key == node->key)
+			if(head != NULL && head->key == key)
 				/* of course, head->frwrd[i] may equals NULL*/
 				update[i]->frwrd[i] = head->frwrd[i]; 
 		}
@@ -119,6 +119,30 @@ SklNode * DeleteSkl(SklHdr * hdr, unsigned long key)
 		return NULL;
 
 }
+
+SklNode * SearchNode(SklHdr * hdr, unsigned long key)
+{
+	/* search the node whose's key equals to key */
+	/* if not find the target node, return NULL */
+	SklNode * head = (void *)hdr + sizeof(struct skl_header);
+	SklNode * target = NULL;
+	ssize_t i = hdr->skl_level - 1;
+	for(; i >= 0; i--)
+	{
+		while(head->frwrd[i] != NULL &&
+				head->frwrd[i]->key < key)
+			head = head->frwrd[i];
+		
+		if(head->frwrd[i] == NULL ||
+				head->frwrd[i]->key > key)
+			continue;
+		else
+			/* find the target node */
+			target = head->frwrd[i];
+	}
+	return target;
+}
+
 
 void SklTrav(SklHdr * hdr)
 {

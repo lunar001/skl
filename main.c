@@ -28,6 +28,16 @@ int main()
 
 	SklTrav(hdr);	
 
+	SklNode * ps = SearchNode(hdr, array[9]);
+
+	if(ps == NULL)
+		printf("Can't find %d in skiplist \n", array[9]);
+	else
+	{
+		printf("%d, array[9] = %d\n", ps->key, array[9]);
+		struct Node * pp = (struct Node * )((void*)ps - offsetof(struct Node, node));
+		printf("The vale of %d is %d\n", array[9], pp->value);
+	}
 	for (i = 1; i < 10; i = i + 2)
 	{
 		struct SklNode  * node = DeleteSkl(hdr, array[i]);
